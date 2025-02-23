@@ -1,14 +1,14 @@
 package ee.riina.kymnevoistlus.controller;
 
+import ee.riina.kymnevoistlus.dto.AthletePointsDTO;
 import ee.riina.kymnevoistlus.entity.Athlete;
-import ee.riina.kymnevoistlus.entity.Event;
+import ee.riina.kymnevoistlus.entity.Result;
+import ee.riina.kymnevoistlus.repository.ResultRepository;
 import ee.riina.kymnevoistlus.repository.AthleteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,7 +16,11 @@ import java.util.Optional;
 public class AthleteController {
 
     @Autowired
+    private ResultRepository resultRepository;
+
+    @Autowired
     AthleteRepository athleteRepository;
+
     //http:localhost:8080/athletes
     @GetMapping("athletes")
     public List<Athlete> getAthletes() {
@@ -45,4 +49,44 @@ public class AthleteController {
         return athleteRepository.findAll();
     }
 
+
+    // Uus endpoint: Ühe sportlase kogupunktide pärimine
+    @GetMapping("athletes/{id}/totalPoints")
+    public int getAthleteTotalPoints(@PathVariable Long id) {
+        Optional<Athlete> athleteOpt = athleteRepository.findById(id);
+        if (!athleteOpt.isPresent()) {
+            throw new RuntimeException("ERROR_ATHLETE_NOT_FOUND");
+        }
+        Athlete athlete = athleteOpt.get();
+        // Otsime kõik tulemused, mis kuuluvad antud sportlasele
+        List<Result> results = resultRepository.findByAthlete(athlete);
+        // Liidame kokku punktid
+        int totalPoints = results.stream().mapToInt(Result::getScore).sum();
+        return totalPoints;
+    }
+
+    // Uus endpoint: Kõik sportlased koos nende kogupunktidega
+    @GetMapping("athletesWithPoints")
+    public List<AthletePointsDTO> getAthletesWithPoints() {
+        List<Athlete> athletes = athleteRepository.findAll();
+        List<AthletePointsDTO> athletePointsList = new ArrayList<>();
+
+        for (Athlete athlete : athletes) {
+            // Otsime iga sportlase tulemused
+            List<Result> results = resultRepository.findByAthlete(athlete);
+            // Summeerime punktid
+            int totalPoints = results.stream().mapToInt(Result::getScore).sum();
+
+            // Loome DTO objekti sportlase andmetega ja tema kogupunktidega
+            AthletePointsDTO dto = new AthletePointsDTO(
+                    athlete.getId(),
+                    athlete.getName(),
+                    athlete.getCountry(),
+                    athlete.getAge(),
+                    totalPoints
+            );
+            athletePointsList.add(dto);
+        }
+        return athletePointsList;
+    }
 }

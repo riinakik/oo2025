@@ -1,4 +1,4 @@
-package ee.riina.kymnevoistlus.controller;
+package ee.riina.kymnevoistlus.scoring;
 
 import java.util.Map;
 

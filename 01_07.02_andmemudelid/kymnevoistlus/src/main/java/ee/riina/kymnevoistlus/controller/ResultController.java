@@ -8,6 +8,7 @@ import ee.riina.kymnevoistlus.repository.AthleteRepository;
 import ee.riina.kymnevoistlus.repository.EventRepository;
 import ee.riina.kymnevoistlus.repository.ResultRepository;
 
+import ee.riina.kymnevoistlus.scoring.DecathlonScoring;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
