@@ -20,6 +20,8 @@ public class DecathlonScoring {
 
     // Punktiarvestuse meetod (STAATILINE)
     public static int calculateScore(String eventName, double result) {
+
+        // Kui sisaldab tundtmatut ala
         if (!SCORE_PARAMETERS.containsKey(eventName)) {
             return 0; // Tundmatu ala
         }

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class EventController {
@@ -25,6 +26,22 @@ public class EventController {
     // POST - Lisa uus ala
     @PostMapping("events")
     public Event addEvent(@RequestBody Event event) {
+        Optional<Event> duplicateEvent = eventRepository.findByName(event.getName());
+
+        // Kontroll, et uut üritust ei saadetaks ID-ga
+        if (event.getId() != null) {
+            throw new RuntimeException("ERROR_CANNOT_ADD_WITH_ID");
+        }
+
+        // Ürituse nimi peab olema esitatud
+        if (event.getName() == null || event.getName().trim().isEmpty()) {
+            throw new RuntimeException("ERROR_MISSING_REQUIRED_FIELD: Event name is missing");
+        }
+
+        // Üritust ei saa topelt lisada
+        if (duplicateEvent.isPresent()) {
+            throw new RuntimeException("ERROR_DUPLICATE_EVENT");
+        }
         return eventRepository.save(event);
     }
 }
