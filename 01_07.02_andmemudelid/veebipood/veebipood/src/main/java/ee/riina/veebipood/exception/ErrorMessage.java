@@ -1,4 +1,4 @@
-package ee.riina.veebipood.exeption;
+package ee.riina.veebipood.exception;
 
 import lombok.Data;
 
