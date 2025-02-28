@@ -12,21 +12,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+//RestController töötleb http päringuid ja tagastab JSON andmeid
 @RestController
 public class AthleteController {
 
-    @Autowired
+    @Autowired                   // Lisatakse vajalikud repostoryd
     private ResultRepository resultRepository;
 
     @Autowired
     AthleteRepository athleteRepository;
 
-    //http:localhost:8080/athletes
+    //http:localhost:8080/athletes tagastab päringu tulemused
     @GetMapping("athletes")
     public List<Athlete> getAthletes() {
         return athleteRepository.findAll();
     }
 
+    //lisab andmebaasi uue sportlase ja tagastab andmed
     @PostMapping("athletes")
     public List<Athlete> addAthlete(@RequestBody Athlete athlete) {
         Optional<Athlete> duplicateAthlete = athleteRepository.findByName(athlete.getName());
@@ -58,9 +60,9 @@ public class AthleteController {
             throw new RuntimeException("ERROR_ATHLETE_NOT_FOUND");
         }
         Athlete athlete = athleteOpt.get();
-        // Otsime kõik tulemused, mis kuuluvad antud sportlasele
+        // Otsib kõik tulemused, mis kuuluvad antud sportlasele
         List<Result> results = resultRepository.findByAthlete(athlete);
-        // Liidame kokku punktid
+        // Liidab kokku punktid
         int totalPoints = results.stream().mapToInt(Result::getScore).sum();
         return totalPoints;
     }
@@ -72,12 +74,12 @@ public class AthleteController {
         List<AthletePointsDTO> athletePointsList = new ArrayList<>();
 
         for (Athlete athlete : athletes) {
-            // Otsime iga sportlase tulemused
+            // Otsib iga sportlase tulemused
             List<Result> results = resultRepository.findByAthlete(athlete);
-            // Summeerime punktid
+            // Summeerib punktid
             int totalPoints = results.stream().mapToInt(Result::getScore).sum();
 
-            // Loome DTO objekti sportlase andmetega ja tema kogupunktidega
+            // Loob DTO objekti sportlase andmetega ja tema kogupunktidega
             AthletePointsDTO dto = new AthletePointsDTO(
                     athlete.getId(),
                     athlete.getName(),

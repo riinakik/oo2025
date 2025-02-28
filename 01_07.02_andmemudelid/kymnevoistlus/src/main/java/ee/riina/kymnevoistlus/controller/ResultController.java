@@ -46,32 +46,27 @@ public class ResultController {
             throw new RuntimeException("ERROR_CANNOT_ADD_WITH_ID");
         }
 
-        // Kontrollime, et tulemuse väärtus oleks positiivne.
-        // Negatiivne tulemus võib tähendada sisendi viga.
+        // Kontroll, et tulemuse väärtus oleks positiivne
         if (result.getResult() < 0) {
             throw new RuntimeException("ERROR_RESULT_MUST_BE_POSITIVE");
         }
 
-        // Kontrollime, et andmebaasist saadi vastav sportlase kirje.
-        // Kui sportlast ei leita, ei saa tulemuse seostamist jätkata.
+        // Kui sportlast ei leitud
         if (!athleteOpt.isPresent()) {
             throw new RuntimeException("ERROR_ATHLETE_NOT_FOUND");
         }
 
-        // Kontrollime, et andmebaasist saadi vastav võistluse kirje.
-        // Kui võistlust ei leita, ei saa tulemuse seostamist jätkata.
+        // Kui võistlust ei leita
         if (!eventOpt.isPresent()) {
             throw new RuntimeException("ERROR_EVENT_NOT_FOUND");
         }
 
-        // Kontrollime, et vastus sisaldab sportlase andmeid ja et sportlase ID on määratud.
-        // See on vajalik, et saaks hiljem õige kirje leida või seostada.
+        // Kontroll, et vastus sisaldab sportlase andmeid ja et sportlase ID on määratud.
         if (result.getAthlete() == null || result.getAthlete().getId() == null) {
             throw new RuntimeException("ERROR_MISSING_REQUIRED_FIELD: Athlete ID is missing");
         }
 
-        // Kontrollime, et vastus sisaldab võistluse andmeid ja et võistluse ID on määratud.
-        // Ilma võistluse andmeteta ei saa tulemust õigesti seostada.
+        // Kontrolli, et vastus sisaldab võistluse andmeid ja et võistluse ID on määratud.
         if (result.getEvent() == null || result.getEvent().getId() == null) {
             throw new RuntimeException("ERROR_MISSING_REQUIRED_FIELD: Event ID is missing");
         }
