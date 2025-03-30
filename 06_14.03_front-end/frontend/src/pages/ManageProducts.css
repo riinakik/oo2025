@@ -1,0 +1,20 @@
+.manage-products {
+    text-align: center;
+  }
+  
+  .manage-products h2 {
+    margin-bottom: 30px; /* rohkem ruumi pealkirja ja tabeli vahele */
+  }
+  
+  .manage-products table {
+    margin: 0 auto;
+    border-collapse: collapse;
+    width: 60%; /* natuke väiksem tabel */
+  }
+  
+  .manage-products th,
+  .manage-products td {
+    border: 1px solid black;
+    padding: 8px;
+  }
+  
