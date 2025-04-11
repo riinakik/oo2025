@@ -21,12 +21,21 @@ function MainPage() {
         .then(json=> setProducts(json)) //body: sisu, mida tagastab back-end
   }, []); 
 
+  function showByCategory (categoryId: number){
+    fetch("http://localhost:8080/category-products?categoryId=" + categoryId) 
+        .then(res=>res.json()) 
+        .then(json=> setProducts(json)) // mida setin see muutub hmtlis
+  }
+
+  //const showByCategory = () => {}
+
   return (
     <div>
+      <button onClick={() => showByCategory(-1)}>Kõik kategooriad</button>
       {kategooriad.map(kategooria => 
-    <div key={kategooria.id}>
-      {kategooria.name} {kategooria.active}
-      </div> )}
+    <button key={kategooria.id}  onClick={() => showByCategory(kategooria.id)}   >    
+      {kategooria.name}               
+      </button> )}
       <br />
     {products.map(product => 
     <div key={product.id}>
@@ -43,4 +52,5 @@ function MainPage() {
 
 export default MainPage
 
+// ainult üks parent element
 // react koosneb js, mille failid returnivad htmli!

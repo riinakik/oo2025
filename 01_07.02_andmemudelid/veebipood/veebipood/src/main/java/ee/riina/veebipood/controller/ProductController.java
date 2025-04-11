@@ -5,6 +5,7 @@ import ee.riina.veebipood.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @CrossOrigin (origins = "http://localhost:5173/")
@@ -79,6 +80,32 @@ public class ProductController {
         return productRepository.findAll();
     }
 
+    //localhost:8080/category-products?categoryId=2
+   /* @GetMapping("/category-products")
+    public List<Product> getCategoryProducts(@RequestParam Long categoryId) {
+        List<Product> products = productRepository.findAll();
+        List<Product> filteredProducts = new ArrayList<>(); //tühi list
+  //      for (int i = 0; i < ; i++) {
+  //        if (products get(i).getCategory().getId().equals(categoryId{
+  //         filteredProducts.add(products get(i));     }
+  //      }
+        for (Product p: products) {
+            // == kontrollib kas vasak ja parem pool on identsed
+            // .equals kontrollib kas vasaku ja parema pole väärtused on identsed
+            if (p.getCategory().getId().equals(categoryId)){
+                filteredProducts.add(p);
+            }
+        }
+        return filteredProducts;
+    }*/
+
+    @GetMapping("/category-products")
+    public List<Product> getCategoryProducts(@RequestParam Long categoryId){
+        if (categoryId == -1){
+            return productRepository.findAll();  // returniga funktsioon lõppeb, else pole vaja
+        }
+        return productRepository.findByCategory_Id(categoryId);
+    }
 
 }
 

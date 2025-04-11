@@ -32,4 +32,5 @@ public class CategoryController {
         categoryRepository.deleteById(id);
         return categoryRepository.findAll();
     }
+
 }
