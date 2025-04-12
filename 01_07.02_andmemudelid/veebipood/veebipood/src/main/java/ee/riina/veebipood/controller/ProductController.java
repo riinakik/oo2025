@@ -3,6 +3,8 @@ package ee.riina.veebipood.controller;
 import ee.riina.veebipood.entity.Product;
 import ee.riina.veebipood.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -99,12 +101,13 @@ public class ProductController {
         return filteredProducts;
     }*/
 
+    //localhost:8080/category-products?categoryId=1&page=0&size=2
     @GetMapping("/category-products")
-    public List<Product> getCategoryProducts(@RequestParam Long categoryId){
+    public Page<Product> getCategoryProducts(@RequestParam Long categoryId, Pageable pageable){
         if (categoryId == -1){
-            return productRepository.findAll();  // returniga funktsioon lõppeb, else pole vaja
+            return productRepository.findAll(pageable);  // returniga funktsioon lõppeb, else pole vaja
         }
-        return productRepository.findByCategory_Id(categoryId);
+        return productRepository.findByCategory_Id(categoryId, pageable);
     }
 
 }
