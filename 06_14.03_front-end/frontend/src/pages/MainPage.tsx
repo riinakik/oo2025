@@ -53,6 +53,7 @@ function MainPage() {
       </button> )}
       <br />
       <br />
+      
       <div>Kokku tooteid: {totalProducts} tk</div>
     {products.map(product => 
     <div key={product.id}>

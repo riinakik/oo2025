@@ -6,6 +6,8 @@ import ee.riina.kymnevoistlus.entity.Result;
 import ee.riina.kymnevoistlus.repository.ResultRepository;
 import ee.riina.kymnevoistlus.repository.AthleteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -92,4 +94,19 @@ public class AthleteController {
         }
         return athletePointsList;
     }
+    // http://localhost:8080/athletes-by-country?country=Estonia&page=0&size=2
+    @GetMapping("/athletes-by-country")
+    public Page<Athlete> getAthletesByCountry(@RequestParam String country, Pageable pageable) {
+        if (country.equals("-1")){
+            return athleteRepository.findAll(pageable); // kõik sportlased
+        }
+        return athleteRepository.findByCountry(country, pageable); // filtriga
+    }
+
+    @GetMapping("/athletes/countries")
+    public List<String> getCountries() {
+        return athleteRepository.findDistinctCountries();
+    }
+
+
 }
