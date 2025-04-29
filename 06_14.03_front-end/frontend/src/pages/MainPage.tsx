@@ -1,4 +1,4 @@
-import {useEffect, useState } from 'react'
+import {useCallback, useEffect, useRef, useState } from 'react'
 import { Category } from '../models/Category' // ../ kausta võrra ülevalpool
 import { Product } from '../models/Product'
 
@@ -8,7 +8,8 @@ function MainPage() {
   const [kategooriad, setKategooriad] = useState<Category[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [totalProducts, setTotalProducts] = useState(0);
-  const productsByPage = 2;
+  const [totalPages, setTotalPages] = useState(0);
+  const [productsByPage, setProductsByPage] = useState(1);
   const [page, setPage] = useState(0);
   const [activeCategory, setActiveCategory] = useState(-1);
   // let page = 0; ja muudaks hiljem nt 1, siis see ei lähe hiljem HTMLi uuendama
@@ -22,11 +23,11 @@ function MainPage() {
         .then(json=> setKategooriad(json)) //body: sisu, mida tagastab back-end
   }, []);
 
-  useEffect(() => {
-    showByCategory(-1, 0);
-  }, []); 
 
-  function showByCategory (categoryId: number, currentPage: number){
+  // default = page on 0
+  // default = size on 20
+
+  const showByCategory = useCallback((categoryId: number, currentPage: number) => {
     setActiveCategory(categoryId);
     setPage(currentPage);
     fetch("http://localhost:8080/category-products?categoryId=" + categoryId + 
@@ -36,16 +37,31 @@ function MainPage() {
         .then(json=> {
           setProducts(json.content);
           setTotalProducts(json.totalElements);
+          setTotalPages(json.totalPages);
         }) // mida setin see muutub hmtlis
-  }
+  }, [productsByPage])
+
+  useEffect(() => {
+    showByCategory(-1, 0);
+  }, [showByCategory]); 
 
   //const showByCategory = () => {}
 
   function updatePage(newPage: number){
     showByCategory(activeCategory, newPage); //TODO
   }
+
+  const productsByPageRef = useRef<HTMLSelectElement>(null); //htmli inputiga/selectiga sidumiseks
+  // current? ...TypeScript näeb, et ref on algusel null, st et on 2 väärtuse võimalust
+  //current. value....selle selecti väärtus, mis väljastab alati stringi. Number() konverdib numbriks
   return (
     <div>
+      <select ref={productsByPageRef}
+              onChange={() => setProductsByPage(Number(productsByPageRef.current?.value))}> 
+        <option>1</option>       
+        <option>2</option>
+        <option>3</option>
+      </select>
       <button onClick={() => showByCategory(-1, 0)}>Kõik kategooriad</button>
       {kategooriad.map(kategooria => 
     <button key={kategooria.id}  onClick={() => showByCategory(kategooria.id, 0)}   >    
@@ -66,7 +82,8 @@ function MainPage() {
       </div> )}
       <button disabled = {page === 0 } onClick={() => updatePage(page -1)}>Eelmine</button>
       <span>{page + 1}</span>
-      <button disabled = {page === Math.ceil(totalProducts/productsByPage)-1} onClick={() => updatePage(page +1)}>Järgmine</button>
+      <button disabled = {page >= totalPages - 1} 
+        onClick={() => updatePage(page +1)}>Järgmine</button>
     </div>
   )
 }

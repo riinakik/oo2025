@@ -9,6 +9,7 @@
   .manage-products table {
     margin: 0 auto;
     border-collapse: collapse;
+    border: 1px solid black;
     width: 60%; /* natuke väiksem tabel */
   }
   
@@ -16,5 +17,9 @@
   .manage-products td {
     border: 1px solid black;
     padding: 8px;
+  }
+
+  table {
+    border: 1px solid black;
   }
   

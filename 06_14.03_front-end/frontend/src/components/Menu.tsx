@@ -4,6 +4,12 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import { Link } from 'react-router-dom';
 
+//React hook (reackti erikood)
+// 1. peab importima
+// 2. peab algama use eesliidesega
+// 3. peab olema funktsionnlne, tõmban ta käima nii, et panen sulud lõppu
+// 4. ei tohi olla tingimuslikult loodud (if sees)
+// 5. ei tohi olla funktsioonide sees loodud
 function Menu() {
   return (
     <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
