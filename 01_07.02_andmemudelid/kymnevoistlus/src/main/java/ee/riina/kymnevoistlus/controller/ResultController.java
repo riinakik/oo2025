@@ -34,6 +34,11 @@ public class ResultController {
         return resultRepository.findAll();
     }
 
+    @GetMapping("results/{id}")
+    public Result getResult(@PathVariable Long id) {
+        return resultRepository.findById(id).orElseThrow();
+    }
+
     // POST päring tulemuse lisamiseks, mis arvutab ka punktid
     @PostMapping("results")
     public List<Result> addResult(@RequestBody Result result) {
@@ -90,4 +95,43 @@ public class ResultController {
 
         return resultRepository.findAll();
     }
+
+    @DeleteMapping("results/{id}")
+    public List<Result> deleteResult(@PathVariable Long id) {
+        resultRepository.deleteById(id);
+        return resultRepository.findAll();
+    }
+
+    @PutMapping("results")
+    public Result updateResult(@RequestBody Result result) {
+        Optional<Athlete> athleteOpt = athleteRepository.findById(result.getAthlete().getId());
+        Optional<Event> eventOpt = eventRepository.findById(result.getEvent().getId());
+
+        if (!athleteOpt.isPresent()) {
+            throw new RuntimeException("ERROR_ATHLETE_NOT_FOUND");
+        }
+
+        if (!eventOpt.isPresent()) {
+            throw new RuntimeException("ERROR_EVENT_NOT_FOUND");
+        }
+
+        if (result.getId() == null) {
+            throw new RuntimeException("ERROR_MISSING_ID");
+        }
+
+        if (result.getResult() < 0) {
+            throw new RuntimeException("ERROR_RESULT_MUST_BE_POSITIVE");
+        }
+
+        Athlete athlete = athleteOpt.get();
+        Event event = eventOpt.get();
+
+        int calculatedScore = DecathlonScoring.calculateScore(event.getName(), result.getResult());
+        result.setScore(calculatedScore);
+        result.setAthlete(athlete);
+        result.setEvent(event);
+
+        return resultRepository.save(result);
+    }
+
 }

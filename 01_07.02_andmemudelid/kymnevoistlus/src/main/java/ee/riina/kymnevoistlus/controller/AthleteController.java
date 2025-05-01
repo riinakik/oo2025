@@ -31,6 +31,12 @@ public class AthleteController {
         return athleteRepository.findAll();
     }
 
+    @GetMapping("athletes/{id}")
+    public Athlete getAthlete(@PathVariable Long id) {
+        return athleteRepository.findById(id).orElseThrow();
+    }
+
+
     //lisab andmebaasi uue sportlase ja tagastab andmed
     @PostMapping("athletes")
     public List<Athlete> addAthlete(@RequestBody Athlete athlete) {

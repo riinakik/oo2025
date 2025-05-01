@@ -1,7 +1,20 @@
 .results-page {
-    text-align: center;
-  }
-  
-  .results-page h2 {
-    margin-bottom: 30px;
-  }
+  text-align: center;
+}
+
+.results-page h2 {
+  margin-bottom: 30px;
+}
+
+.results-table {
+  margin: 0 auto;
+  border-collapse: collapse;
+  border: 1px solid black;
+  width: 60%;
+}
+
+.results-table th,
+.results-table td {
+  border: 1px solid black;
+  padding: 8px;
+}
