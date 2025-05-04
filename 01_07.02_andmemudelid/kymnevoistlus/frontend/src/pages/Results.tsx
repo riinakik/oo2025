@@ -105,9 +105,10 @@ function Results() {
         </thead>
         <tbody>
           {results.map((result, index) => {
+            const isThrow = ["shot put", "discus throw", "javelin throw"].includes(result.event.name);
             const isTrack = result.event.name.includes("m") && !result.event.name.includes("jump");
             const isJump = result.event.name.includes("jump");
-            const unit = isTrack ? "s" : isJump ? "m" : "";
+            const unit = isTrack ? "s" : isJump ? "cm" : isThrow ? "m" : "";
             return (
               <tr key={index}>
                 <td>{result.athlete.name}</td>

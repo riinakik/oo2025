@@ -20,10 +20,8 @@ public class DecathlonScoring {
 
     // Punktiarvestuse meetod (STAATILINE)
     public static int calculateScore(String eventName, double result) {
-
-        // Kui sisaldab tundtmatut ala
         if (!SCORE_PARAMETERS.containsKey(eventName)) {
-            return 0; // Tundmatu ala
+            return 0;
         }
 
         double[] params = SCORE_PARAMETERS.get(eventName);
@@ -31,12 +29,9 @@ public class DecathlonScoring {
         double B = params[1];
         double C = params[2];
 
-        // Jooksualad (100m, 400m, 110m tõkkejooks, 1500m)
         if (eventName.contains("m") && !eventName.contains("jump")) {
             return (int) (A * Math.pow(B - result, C));
-        }
-        // Hüpped ja visked
-        else {
+        } else {
             return (int) (A * Math.pow(result - B, C));
         }
     }

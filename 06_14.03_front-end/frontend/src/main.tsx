@@ -1,7 +1,9 @@
 import { StrictMode } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'; // className="accordion"
+import 'leaflet/dist/leaflet.css';
 import { createRoot } from 'react-dom/client'
 import './index.css' // .accordion {width: 500px !important;} bootstrap ülevalpool, et saaks üle kirjutada
+import './i18n';
 import App from './App.tsx'
 import { BrowserRouter } from 'react-router-dom'
 
