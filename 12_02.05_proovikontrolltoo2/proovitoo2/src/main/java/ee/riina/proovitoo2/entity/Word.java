@@ -19,7 +19,8 @@ public class Word {
 
     private String type;
 
-    @Column(columnDefinition = "TEXT")
+    @Lob  // võimaldab väga pikki tekste
+    @Column(length = 5000)
     private String description;
 
     public Word() {
