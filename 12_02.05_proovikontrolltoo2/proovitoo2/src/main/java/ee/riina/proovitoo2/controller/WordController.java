@@ -5,6 +5,8 @@ import ee.riina.proovitoo2.repository.WordRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -17,8 +19,8 @@ public class WordController {
 
     // GET http://localhost:8080/words   TÖÖTAB
     @GetMapping("/words")
-    public List<Word> getWords() {
-        return wordRepository.findAll();
+    public Page<Word> getWords(Pageable pageable) {
+        return wordRepository.findAll(pageable);
     }
 
     // POST ühe sõna lisamiseks
@@ -74,5 +76,13 @@ public class WordController {
 
         wordRepository.save(word);
         return wordRepository.findAll();
+    }
+
+    @GetMapping("/parent-words")
+    public List<Word> getParentWords(@RequestParam Long parentId){
+        if (parentId == -1){
+            return wordRepository.findAll();  // returniga funktsioon lõppeb, else pole vaja
+        }
+        return wordRepository.findByParent_Id(parentId);
     }
 }

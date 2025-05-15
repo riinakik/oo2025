@@ -11,20 +11,11 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-public class Word {
 
+public class Parent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long typeID;
 
-    private String type;
-
-    //@Lob  // võimaldab väga pikki tekste
-    //@Column(length = 5000)
-    @Column(length = 1000)
-    private String description;
-
-    @ManyToOne
-    private Parent parent;
+    private Long id;
+    private String name;
 }
-
