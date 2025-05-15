@@ -19,6 +19,9 @@ function SingleWord() {
 
   return (
     <div>
+      <Link to={"/"}>
+        <button>Main page</button>
+      </Link>
       <div>Sõna: {word?.type}</div>
       <div>Kirjeldus: {word?.description}</div>
       <Link to={"/edit-word/" + word?.typeID}>

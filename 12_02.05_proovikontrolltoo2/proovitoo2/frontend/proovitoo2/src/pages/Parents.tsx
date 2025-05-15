@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Word } from "../models/Word";
 import { Parent } from "../models/Parent";
+import { Link } from "react-router-dom";
 
 function Parents() {
   const [words, setWords] = useState<Word[]>([]);
@@ -29,7 +30,12 @@ function Parents() {
   return (
     <div>
       <h2>Haldajad</h2>
-
+      <br />
+      <Link to={"/"}>
+        <button>Main page</button>
+      </Link>
+      <br />
+      <br />
       <div>
         <button onClick={() => filterByParent(-1)}>Kõik</button>
         {parent.map((p) => (
