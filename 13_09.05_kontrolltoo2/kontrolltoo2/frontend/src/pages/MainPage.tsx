@@ -126,7 +126,7 @@ function MainPage() {
 
       <br />
       <Link to="/persons">
-        <button>Näita kasutajaid</button>
+        <button>Näita kasutajate kommentaare</button>
       </Link>
     </div>
   );
