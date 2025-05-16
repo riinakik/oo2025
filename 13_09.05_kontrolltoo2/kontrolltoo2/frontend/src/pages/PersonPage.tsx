@@ -72,14 +72,13 @@ function Persons() {
       {personId === -1 && (
         <select
           ref={commentsByPageRef}
-          value={commentsByPage}
           onChange={() =>
             setCommentsByPage(Number(commentsByPageRef.current?.value))
           }
         >
-          <option value={1}>1</option>
-          <option value={5}>5</option>
-          <option value={10}>10</option>
+          <option>1</option>
+          <option>5</option>
+          <option>10</option>
         </select>
       )}
 
