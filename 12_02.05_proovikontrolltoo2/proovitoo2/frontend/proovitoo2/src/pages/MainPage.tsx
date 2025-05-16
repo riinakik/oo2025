@@ -4,25 +4,28 @@ import { Link } from "react-router-dom";
 import { Parent } from "../models/Parent";
 
 function MainPage() {
-  const [words, setWords] = useState<Word[]>([]);
-  const [parent, setParent] = useState<Parent[]>([]);
-  const [parentId, setParentId] = useState<number | null>(null);
-  const [newType, setNewType] = useState("");
-  const [newDescription, setNewDescription] = useState("");
-  const [totalWords, setTotalWords] = useState(0);
-  const [totalPages, setTotalPages] = useState(0);
-  const [wordsByPage, setWordsByPage] = useState(1);
-  const [sort, setSort] = useState("typeID,asc");
-  const [page, setPage] = useState(0);
+  // HOIAME OLEKUID
+  const [words, setWords] = useState<Word[]>([]); // sõnade loetelu
+  const [parent, setParent] = useState<Parent[]>([]); // haldajate loetelu
+  const [parentId, setParentId] = useState<number | null>(null); // valitud haldaja ID
+  const [newType, setNewType] = useState(""); // uus tüüp
+  const [newDescription, setNewDescription] = useState(""); // uus kirjeldus
+  const [totalWords, setTotalWords] = useState(0); // sõnade koguarv
+  const [totalPages, setTotalPages] = useState(0); // lehekülgede koguarv
+  const [wordsByPage, setWordsByPage] = useState(1); // mitu sõna lehel
+  const [sort, setSort] = useState("typeID,asc"); // sorteerimise järjekord
+  const [page, setPage] = useState(0); // hetke leht
 
-  const wordsByPageRef = useRef<HTMLSelectElement>(null);
+  const wordsByPageRef = useRef<HTMLSelectElement>(null); // viide dropdown'ile
 
+  // LAE HALDAJAD
   useEffect(() => {
     fetch("http://localhost:8080/parent")
       .then((res) => res.json())
       .then((json) => setParent(json));
   }, []);
 
+  // LAE SÕNAD igal lehe, sorteerimise või arvumuudatusel
   useEffect(() => {
     fetch(
       "http://localhost:8080/words" +
@@ -41,6 +44,7 @@ function MainPage() {
       });
   }, [page, sort, wordsByPage]);
 
+  // FUNKTSIOON uue sõna lisamiseks
   const addWord = () => {
     if (!newType || !newDescription || parentId === null) return;
 
@@ -55,25 +59,29 @@ function MainPage() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(newWord), // nüüd saadetakse 1 objekt, mitte massiiv
+      body: JSON.stringify(newWord),
     }).then(() => {
       setNewType("");
       setNewDescription("");
-      setPage(0); // Mine tagasi esimesele lehele
+      setPage(0); // mine algusesse pärast lisamist
     });
   };
 
+  // MUUDA LEHTE
   function updatePage(newPage: number) {
     setPage(newPage);
   }
 
+  // JSX vaade
   return (
     <div>
       <h2>Sõnad</h2>
 
+      {/* Sorteerimisnupud */}
       <button onClick={() => setSort("type,asc")}>Sorteeri A-Z</button>
       <button onClick={() => setSort("type,desc")}>Sorteeri Z-A</button>
 
+      {/* Mitu sõna ühel lehel */}
       <select
         ref={wordsByPageRef}
         onChange={() => setWordsByPage(Number(wordsByPageRef.current?.value))}
@@ -85,6 +93,7 @@ function MainPage() {
 
       <div>Kokku sõnu: {totalWords}</div>
 
+      {/* Näita iga sõna kohta andmeid */}
       {words.map((word) => (
         <div key={word.typeID}>
           Sõna: {word.type}
@@ -94,6 +103,7 @@ function MainPage() {
         </div>
       ))}
 
+      {/* Lehitsemise nupud */}
       <button disabled={page === 0} onClick={() => updatePage(page - 1)}>
         Eelmine
       </button>
@@ -105,6 +115,7 @@ function MainPage() {
         Järgmine
       </button>
 
+      {/* Vorm uue sõna lisamiseks */}
       <h3>Lisa uus sõna</h3>
       <input
         type="text"
@@ -122,6 +133,7 @@ function MainPage() {
       <br />
       <br />
 
+      {/* Haldaja valik */}
       <select
         value={parentId ?? ""}
         onChange={(e) => setParentId(Number(e.target.value))}
@@ -140,6 +152,7 @@ function MainPage() {
       <br />
       <br />
 
+      {/* Link haldajate lehele */}
       <Link to={"/parents/"}>
         <button>Vaata haldajate järgi</button>
       </Link>
@@ -148,3 +161,4 @@ function MainPage() {
 }
 
 export default MainPage;
+
